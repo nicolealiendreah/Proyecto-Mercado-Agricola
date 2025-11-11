@@ -31,7 +31,13 @@
       <table class="table table-hover mb-0">
         <thead class="thead-light">
           <tr>
-            <th>#</th><th>Nombre</th><th>Tipo</th><th>Marca</th><th>Precio/día</th><th>Estado</th><th class="text-right pr-3">Acciones</th>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Marca</th>
+            <th>Precio/día</th>
+            <th>Estado</th>
+            <th class="text-right pr-3">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -39,15 +45,31 @@
           <tr>
             <td><?php echo e($m->id); ?></td>
             <td><a href="<?php echo e(route('maquinarias.show',$m)); ?>"><?php echo e($m->nombre); ?></a></td>
-            <td><?php echo e($m->tipo); ?></td>
-            <td><?php echo e($m->marca); ?></td>
+
+            <td><?php echo e($m->tipoParam?->nombre ?? $m->tipo); ?></td>
+            <td><?php echo e($m->marcaParam?->nombre ?? $m->marca); ?></td>
+
             <td><?php echo e(number_format($m->precio_dia,2)); ?></td>
+
             <td>
               <?php
-                $map = ['disponible'=>'success','en_mantenimiento'=>'secondary','vendido'=>'danger'];
+                $estado = $m->estadoParam?->nombre ?? $m->estado;
+                $map = [
+                  'Disponible' => 'success',
+                  'En reparación' => 'secondary',
+                  'Reservado' => 'warning',
+                  'Vendido' => 'danger',
+                  'disponible' => 'success',
+                  'en_mantenimiento' => 'secondary',
+                  'dado_baja' => 'dark'
+                ];
               ?>
-              <span class="badge badge-<?php echo e($map[$m->estado] ?? 'light'); ?>"><?php echo e(str_replace('_',' ',$m->estado)); ?></span>
+              <span class="badge badge-<?php echo e($map[$estado] ?? 'light'); ?>">
+                <?php echo e(ucwords(str_replace('_',' ',$estado))); ?>
+
+              </span>
             </td>
+
             <td class="text-right pr-3">
               <a href="<?php echo e(route('maquinarias.edit',$m)); ?>" class="btn btn-sm btn-primary">Editar</a>
               <form action="<?php echo e(route('maquinarias.destroy',$m)); ?>" method="post" class="d-inline">

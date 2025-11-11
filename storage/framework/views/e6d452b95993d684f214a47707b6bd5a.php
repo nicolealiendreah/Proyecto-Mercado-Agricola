@@ -8,9 +8,16 @@
         <ul><?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $e): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><li><?php echo e($e); ?></li><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></ul>
       </div>
     <?php endif; ?>
+
     <form action="<?php echo e(route('maquinarias.update', $maquinaria)); ?>" method="post">
       <?php echo method_field('PUT'); ?>
-      <?php echo $__env->make('maquinarias._form', ['maquinaria'=>$maquinaria], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+      <?php echo $__env->make('maquinarias._form', [
+        'maquinaria' => $maquinaria,
+        'tipos'      => $tipos,
+        'estados'    => $estados,
+        'marcas'     => $marcas,    
+        'modelos'    => $modelos    
+      ], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </form>
   </div>
 </div>

@@ -8,9 +8,16 @@
         <ul>@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
       </div>
     @endif
+
     <form action="{{ route('maquinarias.update', $maquinaria) }}" method="post">
       @method('PUT')
-      @include('maquinarias._form', ['maquinaria'=>$maquinaria])
+      @include('maquinarias._form', [
+        'maquinaria' => $maquinaria,
+        'tipos'      => $tipos,
+        'estados'    => $estados,
+        'marcas'     => $marcas,    {{-- ya filtradas por tipo --}}
+        'modelos'    => $modelos    {{-- ya filtrados por marca --}}
+      ])
     </form>
   </div>
 </div>

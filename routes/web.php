@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrganicoController;
 use App\Http\Controllers\MaquinariaController;
+use Illuminate\Http\Request;
+use App\Models\Param;
 
 // 1) Raíz -> login (pantalla principal)
 Route::redirect('/', '/login');
@@ -23,3 +25,11 @@ Route::view('/publicar', 'public.ads.create')->name('ads.create');
 // 5) CRUDs (panel)
 Route::resource('organicos', OrganicoController::class)->names('organicos');
 Route::resource('maquinarias', MaquinariaController::class)->names('maquinarias');
+
+Route::get('/api/params', function (Request $r) {
+    return Param::where('grupo', $r->query('grupo'))
+        ->where('parent_id', $r->query('parent_id'))
+        ->where('activo', true)
+        ->orderBy('nombre')
+        ->get(['id','nombre']);
+})->name('api.params');

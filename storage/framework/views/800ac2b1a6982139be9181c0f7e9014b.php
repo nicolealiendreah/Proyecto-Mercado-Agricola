@@ -29,7 +29,14 @@
       <table class="table table-hover mb-0">
         <thead class="thead-light">
           <tr>
-            <th>#</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Stock</th>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Variedad</th>
+            <th>Unidad</th>
+            <th>Estado</th>
+            <th>Precio</th>
+            <th>Stock</th>
             <th class="text-right pr-3">Acciones</th>
           </tr>
         </thead>
@@ -38,9 +45,15 @@
           <tr>
             <td><?php echo e($o->id); ?></td>
             <td><a href="<?php echo e(route('organicos.show',$o)); ?>"><?php echo e($o->nombre); ?></a></td>
-            <td><?php echo e($o->categoria); ?></td>
+
+            <td><?php echo e($o->categoriaParam?->nombre ?? $o->categoria); ?></td>
+            <td><?php echo e($o->variedadParam?->nombre ?? '-'); ?></td>
+            <td><?php echo e($o->unidadParam?->nombre ?? '-'); ?></td>
+            <td><?php echo e($o->estadoParam?->nombre ?? '-'); ?></td>
+
             <td><?php echo e(number_format($o->precio,2)); ?></td>
             <td><?php echo e($o->stock); ?></td>
+
             <td class="text-right pr-3">
               <a href="<?php echo e(route('organicos.edit',$o)); ?>" class="btn btn-sm btn-primary">Editar</a>
               <form action="<?php echo e(route('organicos.destroy',$o)); ?>" method="post" class="d-inline">
@@ -50,7 +63,7 @@
             </td>
           </tr>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-          <tr><td colspan="6" class="text-center text-muted">Sin registros</td></tr>
+          <tr><td colspan="9" class="text-center text-muted">Sin registros</td></tr>
         <?php endif; ?>
         </tbody>
       </table>
