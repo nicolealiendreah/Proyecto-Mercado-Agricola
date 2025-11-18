@@ -24,25 +24,85 @@
   <a href="<?php echo e(url('/')); ?>" class="brand-link">
     <span class="brand-text font-weight-light">Mercado Agrícola</span>
   </a>
+
   <div class="sidebar">
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column">
+
+        
         <li class="nav-item">
           <a href="<?php echo e(route('organicos.index')); ?>"
              class="nav-link <?php echo e(request()->routeIs('organicos.*') ? 'active' : ''); ?>">
-            <i class="nav-icon fas fa-leaf"></i><p>Orgánicos</p>
+            <i class="nav-icon fas fa-leaf"></i>
+            <p>Orgánicos</p>
           </a>
         </li>
+
         <li class="nav-item">
           <a href="<?php echo e(route('maquinarias.index')); ?>"
              class="nav-link <?php echo e(request()->routeIs('maquinarias.*') ? 'active' : ''); ?>">
-            <i class="nav-icon fas fa-tractor"></i><p>Maquinaria</p>
+            <i class="nav-icon fas fa-tractor"></i>
+            <p>Maquinaria</p>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a href="<?php echo e(route('animales.index')); ?>"
+             class="nav-link <?php echo e(request()->routeIs('animales.*') ? 'active' : ''); ?>">
+            <i class="nav-icon fas fa-paw"></i>
+            <p>Animales</p>
+          </a>
+        </li>
+
+        
+        <li class="nav-header">Parámetros</li>
+
+        <li class="nav-item">
+          <a href="<?php echo e(route('especies.index')); ?>"
+             class="nav-link <?php echo e(request()->routeIs('especies.*') ? 'active' : ''); ?>">
+            <i class="nav-icon fas fa-dna"></i>
+            <p>Especies</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="<?php echo e(route('razas.index')); ?>"
+             class="nav-link <?php echo e(request()->routeIs('razas.*') ? 'active' : ''); ?>">
+            <i class="nav-icon fas fa-otter"></i>
+            <p>Razas</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="<?php echo e(route('unidades.index')); ?>"
+             class="nav-link <?php echo e(request()->routeIs('unidades.*') ? 'active' : ''); ?>">
+            <i class="nav-icon fas fa-balance-scale"></i>
+            <p>Unidades</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="<?php echo e(route('estados-producto.index')); ?>"
+             class="nav-link <?php echo e(request()->routeIs('estados-producto.*') ? 'active' : ''); ?>">
+            <i class="nav-icon fas fa-tags"></i>
+            <p>Estados de producto</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+  <a href="<?php echo e(route('tipos-maquinaria.index')); ?>"
+     class="nav-link <?php echo e(request()->routeIs('tipos-maquinaria.*') ? 'active' : ''); ?>">
+    <i class="nav-icon fas fa-cogs"></i>
+    <p>Tipos de maquinaria</p>
+  </a>
+</li>
+
+
       </ul>
     </nav>
   </div>
 </aside>
+
 
 
   <div class="content-wrapper">

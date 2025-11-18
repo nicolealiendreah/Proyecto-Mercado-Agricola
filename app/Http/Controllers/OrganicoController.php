@@ -3,99 +3,91 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organico;
-use App\Models\Param;
-use Illuminate\Support\Str;
-use App\Http\Requests\StoreOrganicoRequest;
-use App\Http\Requests\UpdateOrganicoRequest;
+use App\Models\Unidad;
+use App\Models\EstadoProducto;
+use Illuminate\Http\Request;
 
 class OrganicoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $q = request('q');
+        $q = $request->get('q');
 
-        $organicos = Organico::with(['categoriaParam','variedadParam','unidadParam','estadoParam'])
-            ->when($q, fn($qb) =>
-                $qb->where(function($w) use ($q){
-                    $w->where('nombre','ilike',"%$q%")
-                      ->orWhere('categoria','ilike',"%$q%"); // compat con campo texto
-                })
-            )
-            ->orderBy('id','desc')
+        $organicos = Organico::with(['unidad', 'estado'])
+            ->when($q, function ($query, $q) {
+                $query->where('nombre', 'ILIKE', "%$q%");
+            })
+            ->orderBy('id', 'desc')
             ->paginate(10)
             ->withQueryString();
 
-        return view('organicos.index', compact('organicos','q'));
+        return view('organicos.index', compact('organicos', 'q'));
     }
 
     public function create()
     {
-        return view('organicos.create', [
-            'categorias' => Param::grupo('cat_organico')->get(),
-            'estados'    => Param::grupo('estado_organico')->get(),
-            'unidades'   => Param::grupo('unidad')->get(),
-            'variedades' => collect(), // se carga por AJAX al elegir categoría
-        ]);
+        $unidades = Unidad::orderBy('nombre')->get();
+        $estados  = EstadoProducto::orderBy('nombre')->get();
+
+        return view('organicos.create', compact('unidades', 'estados'));
     }
 
-    public function store(StoreOrganicoRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->validated();
-
-        $cat  = Param::find($data['categoria_id'] ?? null);
-        $var  = Param::find($data['variedad_id']  ?? null);
-        $uni  = Param::find($data['unidad_id']    ?? null);
-        $est  = Param::find($data['estado_id']    ?? null);
-
-        // Rellenar columnas antiguas (texto) si existen y/o son NOT NULL
-        $data['categoria'] = $data['categoria'] ?? ($cat?->nombre ?? '');
-        // si tuvieras otras columnas antiguas como 'estado' o 'unidad' en texto:
-        if (!isset($data['estado']) && $est)  $data['estado']  = Str::slug($est->nombre, '_');
-        if (!isset($data['unidad']) && $uni)  $data['unidad']  = $uni->nombre;
+        $data = $request->validate([
+            'nombre'        => 'required|string|max:255',
+            'precio'        => 'required|numeric|min:0',
+            'stock'         => 'required|integer|min:0',
+            'fecha_cosecha' => 'nullable|date',
+            'descripcion'   => 'nullable|string',
+            'unidad_id'     => 'required|exists:unidades,id',
+            'estado_id'     => 'required|exists:estado_productos,id',
+        ]);
 
         Organico::create($data);
-        return redirect()->route('organicos.index')->with('ok','Orgánico creado');
+
+        return redirect()->route('organicos.index')
+            ->with('ok', 'Orgánico creado');
     }
 
     public function show(Organico $organico)
     {
-        $organico->load(['categoriaParam','variedadParam','unidadParam','estadoParam']);
+        $organico->load(['unidad', 'estado']);
+
         return view('organicos.show', compact('organico'));
     }
 
     public function edit(Organico $organico)
     {
-        return view('organicos.edit', [
-            'organico'   => $organico,
-            'categorias' => Param::grupo('cat_organico')->get(),
-            'estados'    => Param::grupo('estado_organico')->get(),
-            'unidades'   => Param::grupo('unidad')->get(),
-            'variedades' => $organico->categoria_id
-                               ? Param::grupo('var_organico')->hijosDe($organico->categoria_id)->get()
-                               : collect(),
-        ]);
+        $unidades = Unidad::orderBy('nombre')->get();
+        $estados  = EstadoProducto::orderBy('nombre')->get();
+
+        return view('organicos.edit', compact('organico', 'unidades', 'estados'));
     }
 
-    public function update(UpdateOrganicoRequest $request, Organico $organico)
+    public function update(Request $request, Organico $organico)
     {
-        $data = $request->validated();
-
-        $cat  = Param::find($data['categoria_id'] ?? null);
-        $var  = Param::find($data['variedad_id']  ?? null);
-        $uni  = Param::find($data['unidad_id']    ?? null);
-        $est  = Param::find($data['estado_id']    ?? null);
-
-        $data['categoria'] = $data['categoria'] ?? ($cat?->nombre ?? $organico->categoria);
-        if (!isset($data['estado']) && $est)  $data['estado'] = Str::slug($est->nombre, '_');
-        if (!isset($data['unidad']) && $uni)  $data['unidad'] = $uni->nombre;
+        $data = $request->validate([
+            'nombre'        => 'required|string|max:255',
+            'precio'        => 'required|numeric|min:0',
+            'stock'         => 'required|integer|min:0',
+            'fecha_cosecha' => 'nullable|date',
+            'descripcion'   => 'nullable|string',
+            'unidad_id'     => 'required|exists:unidades,id',
+            'estado_id'     => 'required|exists:estado_productos,id',
+        ]);
 
         $organico->update($data);
-        return redirect()->route('organicos.index')->with('ok','Orgánico actualizado');
+
+        return redirect()->route('organicos.index')
+            ->with('ok', 'Orgánico actualizado');
     }
 
     public function destroy(Organico $organico)
     {
         $organico->delete();
-        return redirect()->route('organicos.index')->with('ok','Orgánico eliminado');
+
+        return redirect()->route('organicos.index')
+            ->with('ok', 'Orgánico eliminado');
     }
 }

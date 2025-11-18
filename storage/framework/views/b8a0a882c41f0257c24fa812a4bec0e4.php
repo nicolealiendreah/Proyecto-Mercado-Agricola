@@ -1,0 +1,66 @@
+
+
+<?php $__env->startSection('title','Estados de Producto'); ?>
+<?php $__env->startSection('page_title','Estados de Producto'); ?>
+
+<?php $__env->startSection('content'); ?>
+<div class="card">
+
+  <div class="card-header d-flex align-items-center">
+    <h3 class="card-title mb-0 mr-auto">Listado de Estados de Producto</h3>
+
+    <a href="<?php echo e(route('estados-producto.create')); ?>" class="btn btn-success btn-sm">
+      Nuevo Estado
+    </a>
+  </div>
+
+  <div class="card-body p-0">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th class="text-right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php $__empty_1 = true; $__currentLoopData = $estados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $estado): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+          <tr>
+            <td><?php echo e($estado->id); ?></td>
+            <td><?php echo e($estado->nombre); ?></td>
+
+            <td class="text-right text-nowrap">
+              <a href="<?php echo e(route('estados-producto.show', $estado)); ?>" class="btn btn-sm btn-info">Ver</a>
+
+              <a href="<?php echo e(route('estados-producto.edit', $estado)); ?>" class="btn btn-sm btn-primary">
+                Editar
+              </a>
+
+              <form action="<?php echo e(route('estados-producto.destroy', $estado)); ?>"
+                    method="POST"
+                    class="d-inline">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('DELETE'); ?>
+                <button class="btn btn-sm btn-danger"
+                        onclick="return confirm('¿Eliminar este estado?')">
+                  Eliminar
+                </button>
+              </form>
+            </td>
+          </tr>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+          <tr><td colspan="3" class="text-center">No hay estados registrados</td></tr>
+        <?php endif; ?>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer">
+    <?php echo e($estados->links()); ?>
+
+  </div>
+
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.adminlte', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Nicole\mercado-agricola\resources\views/estados/index.blade.php ENDPATH**/ ?>

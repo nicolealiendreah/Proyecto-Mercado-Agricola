@@ -24,25 +24,85 @@
   <a href="{{ url('/') }}" class="brand-link">
     <span class="brand-text font-weight-light">Mercado Agrícola</span>
   </a>
+
   <div class="sidebar">
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column">
+
+        {{-- MÓDULOS PRINCIPALES --}}
         <li class="nav-item">
           <a href="{{ route('organicos.index') }}"
              class="nav-link {{ request()->routeIs('organicos.*') ? 'active' : '' }}">
-            <i class="nav-icon fas fa-leaf"></i><p>Orgánicos</p>
+            <i class="nav-icon fas fa-leaf"></i>
+            <p>Orgánicos</p>
           </a>
         </li>
+
         <li class="nav-item">
           <a href="{{ route('maquinarias.index') }}"
              class="nav-link {{ request()->routeIs('maquinarias.*') ? 'active' : '' }}">
-            <i class="nav-icon fas fa-tractor"></i><p>Maquinaria</p>
+            <i class="nav-icon fas fa-tractor"></i>
+            <p>Maquinaria</p>
           </a>
         </li>
+
+        <li class="nav-item">
+          <a href="{{ route('animales.index') }}"
+             class="nav-link {{ request()->routeIs('animales.*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-paw"></i>
+            <p>Animales</p>
+          </a>
+        </li>
+
+        {{-- PARÁMETROS --}}
+        <li class="nav-header">Parámetros</li>
+
+        <li class="nav-item">
+          <a href="{{ route('especies.index') }}"
+             class="nav-link {{ request()->routeIs('especies.*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-dna"></i>
+            <p>Especies</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('razas.index') }}"
+             class="nav-link {{ request()->routeIs('razas.*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-otter"></i>
+            <p>Razas</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('unidades.index') }}"
+             class="nav-link {{ request()->routeIs('unidades.*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-balance-scale"></i>
+            <p>Unidades</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{{ route('estados-producto.index') }}"
+             class="nav-link {{ request()->routeIs('estados-producto.*') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-tags"></i>
+            <p>Estados de producto</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+  <a href="{{ route('tipos-maquinaria.index') }}"
+     class="nav-link {{ request()->routeIs('tipos-maquinaria.*') ? 'active' : '' }}">
+    <i class="nav-icon fas fa-cogs"></i>
+    <p>Tipos de maquinaria</p>
+  </a>
+</li>
+
+
       </ul>
     </nav>
   </div>
 </aside>
+
 
 
   <div class="content-wrapper">

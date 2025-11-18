@@ -1,23 +1,16 @@
 
-<?php $__env->startSection('content'); ?>
-<div class="x_panel">
-  <div class="x_title"><h2>Editar Orgánico</h2></div>
-  <div class="x_content">
-    <?php if($errors->any()): ?>
-      <div class="alert alert-danger">
-        <ul><?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $e): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><li><?php echo e($e); ?></li><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></ul>
-      </div>
-    <?php endif; ?>
 
-    <form action="<?php echo e(route('organicos.update', $organico)); ?>" method="post">
+<?php $__env->startSection('title','Editar Organico'); ?>
+<?php $__env->startSection('page_title','Editar Organico'); ?>
+
+<?php $__env->startSection('content'); ?>
+<div class="card">
+  <div class="card-body">
+    <form action="<?php echo e(route('organicos.update', $organico)); ?>" method="POST">
       <?php echo method_field('PUT'); ?>
-      <?php echo $__env->make('organicos._form', [
-        'organico'   => $organico,
-        'categorias' => $categorias,
-        'variedades' => $variedades,
-        'unidades'   => $unidades,
-        'estados'    => $estados,
-      ], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+      <?php echo $__env->make('organicos._form', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+      <button class="btn btn-primary">Actualizar</button>
+      <a href="<?php echo e(route('organicos.index')); ?>" class="btn btn-secondary">Cancelar</a>
     </form>
   </div>
 </div>

@@ -1,6 +1,7 @@
 @extends('layouts.adminlte')
-@section('title','Orgánicos')
-@section('page_title','Orgánicos')
+
+@section('title', 'Orgánicos')
+@section('page_title', 'Orgánicos')
 
 @section('content')
 <div class="card">
@@ -16,62 +17,50 @@
       </div>
     </form>
 
-    <a href="{{ route('organicos.create') }}" class="btn btn-success btn-sm mr-2">Nuevo</a>
-    <a href="{{ route('maquinarias.index') }}" class="btn btn-info btn-sm">Ir a Maquinarias</a>
+    <a href="{{ route('organicos.create') }}" class="btn btn-success btn-sm">Nuevo</a>
   </div>
 
   <div class="card-body p-0">
-    @if(session('ok'))
-      <div class="alert alert-success m-3">{{ session('ok') }}</div>
-    @endif
-
-    <div class="table-responsive">
-      <table class="table table-hover mb-0">
-        <thead class="thead-light">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Unidad</th>
+          <th>Estado</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Fecha cosecha</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($organicos as $org)
           <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Variedad</th>
-            <th>Unidad</th>
-            <th>Estado</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th class="text-right pr-3">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-        @forelse($organicos as $o)
-          <tr>
-            <td>{{ $o->id }}</td>
-            <td><a href="{{ route('organicos.show',$o) }}">{{ $o->nombre }}</a></td>
-
-            <td>{{ $o->categoriaParam?->nombre ?? $o->categoria }}</td>
-            <td>{{ $o->variedadParam?->nombre ?? '-' }}</td>
-            <td>{{ $o->unidadParam?->nombre ?? '-' }}</td>
-            <td>{{ $o->estadoParam?->nombre ?? '-' }}</td>
-
-            <td>{{ number_format($o->precio,2) }}</td>
-            <td>{{ $o->stock }}</td>
-
-            <td class="text-right pr-3">
-              <a href="{{ route('organicos.edit',$o) }}" class="btn btn-sm btn-primary">Editar</a>
-              <form action="{{ route('organicos.destroy',$o) }}" method="post" class="d-inline">
+            <td>{{ $org->id }}</td>
+            <td>{{ $org->nombre }}</td>
+            <td>{{ $org->unidad?->nombre }}</td>
+            <td>{{ $org->estado?->nombre }}</td>
+            <td>{{ $org->precio }}</td>
+            <td>{{ $org->stock }}</td>
+            <td>{{ $org->fecha_cosecha }}</td>
+            <td class="text-nowrap">
+              <a href="{{ route('organicos.edit', $org) }}" class="btn btn-sm btn-primary">Editar</a>
+              <form action="{{ route('organicos.destroy', $org) }}" method="POST" class="d-inline">
                 @csrf @method('DELETE')
                 <button class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')">Eliminar</button>
               </form>
             </td>
           </tr>
         @empty
-          <tr><td colspan="9" class="text-center text-muted">Sin registros</td></tr>
+          <tr><td colspan="8" class="text-center">No hay registros</td></tr>
         @endforelse
-        </tbody>
-      </table>
-    </div>
+      </tbody>
+    </table>
   </div>
 
   <div class="card-footer">
-    {{ $organicos->appends(['q'=>$q ?? null])->links() }}
+    {{ $organicos->links() }}
   </div>
 </div>
 @endsection

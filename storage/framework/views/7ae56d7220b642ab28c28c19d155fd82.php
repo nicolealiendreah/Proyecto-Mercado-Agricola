@@ -38,7 +38,7 @@
         </div>
         <div class="card-footer d-flex justify-content-between align-items-center">
           <span class="price">Bs 10.000</span>
-          <a href="<?php echo e(route('organicos.index')); ?>" class="btn btn-success btn-sm px-3">Ver Anuncio</a>
+          <a href="<?php echo e(route('animales.index')); ?>" class="btn btn-success btn-sm px-3">Ver Anuncio</a>
         </div>
       </div>
     </div>

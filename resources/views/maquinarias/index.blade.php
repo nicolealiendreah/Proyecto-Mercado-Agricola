@@ -1,92 +1,75 @@
 @extends('layouts.adminlte')
+
 @section('title','Maquinarias')
 @section('page_title','Maquinarias')
 
 @section('content')
 <div class="card">
-  <div class="card-header">
-    <div class="d-flex align-items-center">
-      <h3 class="card-title mb-0 mr-auto">Listado</h3>
+  <div class="card-header d-flex align-items-center">
+    <h3 class="card-title mb-0 mr-auto">Listado</h3>
 
-      <form method="get" class="form-inline">
-        <div class="input-group input-group-sm mr-2">
-          <input type="text" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Buscar...">
-          <div class="input-group-append">
-            <button class="btn btn-primary">Buscar</button>
-          </div>
+    <form method="get" class="form-inline">
+      <div class="input-group input-group-sm mr-2">
+        <input type="text" name="q" value="{{ $q ?? '' }}" class="form-control" placeholder="Buscar...">
+        <div class="input-group-append">
+          <button class="btn btn-primary">Buscar</button>
         </div>
-      </form>
+      </div>
+    </form>
 
-      <a href="{{ route('maquinarias.create') }}" class="btn btn-success btn-sm mr-2">Nueva</a>
-      <a href="{{ route('organicos.index') }}" class="btn btn-info btn-sm">Ir a Orgánicos</a>
-    </div>
+    <a href="{{ route('maquinarias.create') }}" class="btn btn-success btn-sm">Nueva</a>
   </div>
 
   <div class="card-body p-0">
-    @if(session('ok'))
-      <div class="alert alert-success m-3">{{ session('ok') }}</div>
-    @endif
-
-    <div class="table-responsive">
-      <table class="table table-hover mb-0">
-        <thead class="thead-light">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Marca</th>
+          <th>Modelo</th>
+          <th>Tipo</th>
+          <th>Estado</th>
+          <th>Precio/día</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @forelse($maquinarias as $maq)
           <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Tipo</th>
-            <th>Marca</th>
-            <th>Precio/día</th>
-            <th>Estado</th>
-            <th class="text-right pr-3">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-        @forelse($maquinarias as $m)
-          <tr>
-            <td>{{ $m->id }}</td>
-            <td><a href="{{ route('maquinarias.show',$m) }}">{{ $m->nombre }}</a></td>
+            <td>{{ $maq->id }}</td>
+            <td>{{ $maq->nombre }}</td>
+            <td>{{ $maq->marca }}</td>
+            <td>{{ $maq->modelo }}</td>
+            <td>{{ $maq->tipoMaquinaria?->nombre }}</td>
+            <td>{{ $maq->estado?->nombre }}</td>
+            <td>{{ $maq->precio_dia }}</td>
 
-            <td>{{ $m->tipoParam?->nombre ?? $m->tipo }}</td>
-            <td>{{ $m->marcaParam?->nombre ?? $m->marca }}</td>
+            <td class="text-nowrap">
+              <a href="{{ route('maquinarias.edit', $maq) }}" class="btn btn-sm btn-primary">Editar</a>
 
-            <td>{{ number_format($m->precio_dia,2) }}</td>
-
-            <td>
-              @php
-                $estado = $m->estadoParam?->nombre ?? $m->estado;
-                $map = [
-                  'Disponible' => 'success',
-                  'En reparación' => 'secondary',
-                  'Reservado' => 'warning',
-                  'Vendido' => 'danger',
-                  'disponible' => 'success',
-                  'en_mantenimiento' => 'secondary',
-                  'dado_baja' => 'dark'
-                ];
-              @endphp
-              <span class="badge badge-{{ $map[$estado] ?? 'light' }}">
-                {{ ucwords(str_replace('_',' ',$estado)) }}
-              </span>
-            </td>
-
-            <td class="text-right pr-3">
-              <a href="{{ route('maquinarias.edit',$m) }}" class="btn btn-sm btn-primary">Editar</a>
-              <form action="{{ route('maquinarias.destroy',$m) }}" method="post" class="d-inline">
-                @csrf @method('DELETE')
-                <button class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')">Eliminar</button>
+              <form action="{{ route('maquinarias.destroy', $maq) }}"
+                    method="POST" class="d-inline">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-sm btn-danger"
+                        onclick="return confirm('¿Eliminar esta maquinaria?')">
+                  Eliminar
+                </button>
               </form>
             </td>
           </tr>
         @empty
-          <tr><td colspan="7" class="text-center text-muted">Sin registros</td></tr>
+          <tr>
+            <td colspan="8" class="text-center">No hay registros</td>
+          </tr>
         @endforelse
-        </tbody>
-      </table>
-    </div>
+      </tbody>
+    </table>
   </div>
 
   <div class="card-footer">
-    {{ $maquinarias->appends(['q'=>$q ?? null])->links() }}
+    {{ $maquinarias->links() }}
   </div>
 </div>
 @endsection

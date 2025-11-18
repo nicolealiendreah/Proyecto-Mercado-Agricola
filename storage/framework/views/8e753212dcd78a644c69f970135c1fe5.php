@@ -1,93 +1,75 @@
 
+
 <?php $__env->startSection('title','Maquinarias'); ?>
 <?php $__env->startSection('page_title','Maquinarias'); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="card">
-  <div class="card-header">
-    <div class="d-flex align-items-center">
-      <h3 class="card-title mb-0 mr-auto">Listado</h3>
+  <div class="card-header d-flex align-items-center">
+    <h3 class="card-title mb-0 mr-auto">Listado</h3>
 
-      <form method="get" class="form-inline">
-        <div class="input-group input-group-sm mr-2">
-          <input type="text" name="q" value="<?php echo e($q ?? ''); ?>" class="form-control" placeholder="Buscar...">
-          <div class="input-group-append">
-            <button class="btn btn-primary">Buscar</button>
-          </div>
+    <form method="get" class="form-inline">
+      <div class="input-group input-group-sm mr-2">
+        <input type="text" name="q" value="<?php echo e($q ?? ''); ?>" class="form-control" placeholder="Buscar...">
+        <div class="input-group-append">
+          <button class="btn btn-primary">Buscar</button>
         </div>
-      </form>
+      </div>
+    </form>
 
-      <a href="<?php echo e(route('maquinarias.create')); ?>" class="btn btn-success btn-sm mr-2">Nueva</a>
-      <a href="<?php echo e(route('organicos.index')); ?>" class="btn btn-info btn-sm">Ir a Orgánicos</a>
-    </div>
+    <a href="<?php echo e(route('maquinarias.create')); ?>" class="btn btn-success btn-sm">Nueva</a>
   </div>
 
   <div class="card-body p-0">
-    <?php if(session('ok')): ?>
-      <div class="alert alert-success m-3"><?php echo e(session('ok')); ?></div>
-    <?php endif; ?>
-
-    <div class="table-responsive">
-      <table class="table table-hover mb-0">
-        <thead class="thead-light">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Marca</th>
+          <th>Modelo</th>
+          <th>Tipo</th>
+          <th>Estado</th>
+          <th>Precio/día</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php $__empty_1 = true; $__currentLoopData = $maquinarias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $maq): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
           <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Tipo</th>
-            <th>Marca</th>
-            <th>Precio/día</th>
-            <th>Estado</th>
-            <th class="text-right pr-3">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-        <?php $__empty_1 = true; $__currentLoopData = $maquinarias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-          <tr>
-            <td><?php echo e($m->id); ?></td>
-            <td><a href="<?php echo e(route('maquinarias.show',$m)); ?>"><?php echo e($m->nombre); ?></a></td>
+            <td><?php echo e($maq->id); ?></td>
+            <td><?php echo e($maq->nombre); ?></td>
+            <td><?php echo e($maq->marca); ?></td>
+            <td><?php echo e($maq->modelo); ?></td>
+            <td><?php echo e($maq->tipoMaquinaria?->nombre); ?></td>
+            <td><?php echo e($maq->estado?->nombre); ?></td>
+            <td><?php echo e($maq->precio_dia); ?></td>
 
-            <td><?php echo e($m->tipoParam?->nombre ?? $m->tipo); ?></td>
-            <td><?php echo e($m->marcaParam?->nombre ?? $m->marca); ?></td>
+            <td class="text-nowrap">
+              <a href="<?php echo e(route('maquinarias.edit', $maq)); ?>" class="btn btn-sm btn-primary">Editar</a>
 
-            <td><?php echo e(number_format($m->precio_dia,2)); ?></td>
-
-            <td>
-              <?php
-                $estado = $m->estadoParam?->nombre ?? $m->estado;
-                $map = [
-                  'Disponible' => 'success',
-                  'En reparación' => 'secondary',
-                  'Reservado' => 'warning',
-                  'Vendido' => 'danger',
-                  'disponible' => 'success',
-                  'en_mantenimiento' => 'secondary',
-                  'dado_baja' => 'dark'
-                ];
-              ?>
-              <span class="badge badge-<?php echo e($map[$estado] ?? 'light'); ?>">
-                <?php echo e(ucwords(str_replace('_',' ',$estado))); ?>
-
-              </span>
-            </td>
-
-            <td class="text-right pr-3">
-              <a href="<?php echo e(route('maquinarias.edit',$m)); ?>" class="btn btn-sm btn-primary">Editar</a>
-              <form action="<?php echo e(route('maquinarias.destroy',$m)); ?>" method="post" class="d-inline">
-                <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                <button class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar?')">Eliminar</button>
+              <form action="<?php echo e(route('maquinarias.destroy', $maq)); ?>"
+                    method="POST" class="d-inline">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('DELETE'); ?>
+                <button class="btn btn-sm btn-danger"
+                        onclick="return confirm('¿Eliminar esta maquinaria?')">
+                  Eliminar
+                </button>
               </form>
             </td>
           </tr>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-          <tr><td colspan="7" class="text-center text-muted">Sin registros</td></tr>
+          <tr>
+            <td colspan="8" class="text-center">No hay registros</td>
+          </tr>
         <?php endif; ?>
-        </tbody>
-      </table>
-    </div>
+      </tbody>
+    </table>
   </div>
 
   <div class="card-footer">
-    <?php echo e($maquinarias->appends(['q'=>$q ?? null])->links()); ?>
+    <?php echo e($maquinarias->links()); ?>
 
   </div>
 </div>

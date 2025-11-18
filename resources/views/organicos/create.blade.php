@@ -1,22 +1,15 @@
 @extends('layouts.adminlte')
-@section('content')
-<div class="x_panel">
-  <div class="x_title"><h2>Nuevo Orgánico</h2></div>
-  <div class="x_content">
-    @if ($errors->any())
-      <div class="alert alert-danger">
-        <ul>@foreach ($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
-      </div>
-    @endif
 
-    <form action="{{ route('organicos.store') }}" method="post">
-      @include('organicos._form', [
-        'organico'   => null,
-        'categorias' => $categorias,
-        'variedades' => $variedades,
-        'unidades'   => $unidades,
-        'estados'    => $estados,
-      ])
+@section('title','Nuevo Organico')
+@section('page_title','Nuevo Organico')
+
+@section('content')
+<div class="card">
+  <div class="card-body">
+    <form action="{{ route('organicos.store') }}" method="POST">
+      @include('organicos._form')
+      <button class="btn btn-primary">Guardar</button>
+      <a href="{{ route('organicos.index') }}" class="btn btn-secondary">Cancelar</a>
     </form>
   </div>
 </div>

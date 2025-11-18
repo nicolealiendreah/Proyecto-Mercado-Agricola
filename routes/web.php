@@ -3,33 +3,34 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrganicoController;
 use App\Http\Controllers\MaquinariaController;
-use Illuminate\Http\Request;
-use App\Models\Param;
+use App\Http\Controllers\AnimalController;
+use App\Http\Controllers\EspecieController;
+use App\Http\Controllers\RazaController;
+use App\Http\Controllers\UnidadController;
+use App\Http\Controllers\EstadoProductoController;
+use App\Http\Controllers\TipoMaquinariaController;
 
-// 1) Raíz -> login (pantalla principal)
 Route::redirect('/', '/login');
-
-// 2) Login (solo UI)
 Route::view('/login', 'public.auth.login')->name('login.demo');
-// Registro (solo UI)
 Route::view('/registro', 'public.auth.register')->name('register.demo');
-
-
-// 3) Home público (portada con hero)
 Route::view('/inicio', 'public.home')->name('home');
 
-// 4) Páginas públicas
 Route::view('/anuncios', 'public.ads.index')->name('ads.index');
 Route::view('/publicar', 'public.ads.create')->name('ads.create');
 
-// 5) CRUDs (panel)
-Route::resource('organicos', OrganicoController::class)->names('organicos');
-Route::resource('maquinarias', MaquinariaController::class)->names('maquinarias');
+Route::resource('organicos', OrganicoController::class);
+Route::resource('maquinarias', MaquinariaController::class);
+Route::resource('animales', AnimalController::class);
 
-Route::get('/api/params', function (Request $r) {
-    return Param::where('grupo', $r->query('grupo'))
-        ->where('parent_id', $r->query('parent_id'))
-        ->where('activo', true)
-        ->orderBy('nombre')
-        ->get(['id','nombre']);
-})->name('api.params');
+Route::resource('especies', EspecieController::class);
+Route::resource('razas', RazaController::class);
+Route::resource('unidades', UnidadController::class)
+    ->parameters([
+        'unidades' => 'unidad', 
+    ]);
+
+Route::resource('estados-producto', EstadoProductoController::class)
+    ->parameters([
+        'estados-producto' => 'estado',
+    ]);
+Route::resource('tipos-maquinaria', TipoMaquinariaController::class);

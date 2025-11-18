@@ -12,16 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('maquinarias', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre');
-            $table->string('tipo');
-            $table->string('marca');
-            $table->string('modelo')->nullable();
-            $table->decimal('precio_dia', 10, 2)->default(0);
-            $table->string('estado')->default('disponible');
-            $table->text('descripcion')->nullable();
-            $table->timestamps();
-        });
+                $table->id();
+                $table->string('nombre');
+                $table->string('marca');
+                $table->string('modelo')->nullable();
+                $table->decimal('precio_dia', 10, 2)->default(0);
+                $table->text('descripcion')->nullable();
+
+                $table->foreignId('tipo_maquinaria_id')
+                ->constrained('tipo_maquinarias');
+
+                $table->foreignId('estado_id')
+                ->constrained('estado_productos');
+
+                $table->timestamps();
+            });
     }
 
 
